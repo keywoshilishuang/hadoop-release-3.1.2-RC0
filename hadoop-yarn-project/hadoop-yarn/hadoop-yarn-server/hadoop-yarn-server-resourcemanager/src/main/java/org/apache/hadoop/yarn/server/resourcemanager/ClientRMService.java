@@ -550,6 +550,9 @@ public class ClientRMService extends AbstractService implements
       SubmitApplicationRequest request) throws YarnException, IOException {
     ApplicationSubmissionContext submissionContext = request
         .getApplicationSubmissionContext();
+
+    LOG.warn("stevensli ClientRMService.java->submitApplication->getApplicationSubmissionContext result is:"+submissionContext.toString());
+
     ApplicationId applicationId = submissionContext.getApplicationId();
     CallerContext callerContext = CallerContext.getCurrent();
 
