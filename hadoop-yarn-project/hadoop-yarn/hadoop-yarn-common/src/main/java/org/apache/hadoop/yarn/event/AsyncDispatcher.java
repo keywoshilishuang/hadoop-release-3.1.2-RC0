@@ -189,6 +189,9 @@ public class AsyncDispatcher extends AbstractService implements Dispatcher {
           + event.toString());
     }
 
+    LOG.warn("stevensli Dispatching the event " + event.getClass().getName() + "."
+            + event.toString());
+
     Class<? extends Enum> type = event.getType().getDeclaringClass();
 
     try{

@@ -473,7 +473,9 @@ public class RMAppManager implements EventHandler<RMAppManagerEvent>,
       List<ResourceRequest> amReqs =
           submissionContext.getAMContainerResourceRequests();
 
-      LOG.warn("stevensli validateAndCreateResourceRequest amReqs is:"+amReqs.toString());
+      if (amReqs != null) {
+        LOG.warn("stevensli validateAndCreateResourceRequest amReqs is:"+amReqs.toString());
+      }
 
       if (amReqs == null || amReqs.isEmpty()) {
         if (submissionContext.getResource() != null) {
