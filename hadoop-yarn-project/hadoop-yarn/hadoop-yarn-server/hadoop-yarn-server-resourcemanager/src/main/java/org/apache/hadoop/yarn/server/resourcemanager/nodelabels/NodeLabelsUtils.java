@@ -56,4 +56,22 @@ public final class NodeLabelsUtils {
       throw new IOException(msg);
     }
   }
+
+  public static String[] getParsedLabels(String label){
+    if (label == null) {
+      return new String[]{RMNodeLabelsManager.NO_LABEL};
+    }
+
+    if(label.indexOf("&&")>0){
+      return label.split("&&");
+    }else if(label.indexOf("||")>0){
+      String labels[]= label.split("\\|\\|");
+      if(labels.length==1){
+        return new String[]{labels[0], RMNodeLabelsManager.NO_LABEL};
+      }else{
+        return labels;
+      }
+    }
+    return new String[]{label};
+  }
 }

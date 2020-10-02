@@ -44,6 +44,7 @@ import org.apache.hadoop.yarn.factories.RecordFactory;
 import org.apache.hadoop.yarn.factory.providers.RecordFactoryProvider;
 import org.apache.hadoop.yarn.security.AccessType;
 import org.apache.hadoop.yarn.server.resourcemanager.RMContext;
+import org.apache.hadoop.yarn.server.resourcemanager.nodelabels.NodeLabelsUtils;
 import org.apache.hadoop.yarn.server.resourcemanager.nodelabels.RMNodeLabelsManager;
 import org.apache.hadoop.yarn.server.resourcemanager.rmcontainer.RMContainer;
 import org.apache.hadoop.yarn.server.resourcemanager.rmcontainer.RMContainerImpl;
@@ -300,13 +301,16 @@ public class SchedulerUtils {
     }
 
     // we don't allow specify label expression with more than one node labels now
-    if (labelExp != null && labelExp.contains("&&")) {
-      throw new InvalidLabelResourceRequestException(
-          "Invalid resource request, queue=" + queueInfo.getQueueName()
-              + " specified more than one node label "
-              + "in a node label expression, node label expression = "
-              + labelExp);
-    }
+//    if (labelExp != null && labelExp.contains("&&")) {
+//      throw new InvalidLabelResourceRequestException(
+//          "Invalid resource request, queue=" + queueInfo.getQueueName()
+//              + " specified more than one node label "
+//              + "in a node label expression, node label expression = "
+//              + labelExp);
+//    }
+
+    LOG.info("stevensli SchedulerUtils.java->validateResourceRequest labelExp: " + labelExp + "queue access lable: " + queueInfo.getAccessibleNodeLabels() +
+            "queue name: " + queueInfo.getQueueName());
 
     if (labelExp != null && !labelExp.trim().isEmpty() && queueInfo != null) {
       if (!checkQueueLabelExpression(queueInfo.getAccessibleNodeLabels(),
@@ -402,10 +406,17 @@ public class SchedulerUtils {
     // check node label manager contains this label
     if (null != rmContext) {
       RMNodeLabelsManager nlm = rmContext.getNodeLabelManager();
-      if (nlm != null && !nlm.containsNodeLabel(labelExpression)) {
-        throw new InvalidLabelResourceRequestException(
-            "Invalid label resource request, cluster do not contain "
-                + ", label= " + labelExpression);
+
+      LOG.warn("stevensli SchedulerUtils.java->checkQueueLabelInLabelManager RMNodeLabelsManager is:" + nlm.toString());
+
+      String labelList[] = NodeLabelsUtils.getParsedLabels(labelExpression);
+
+      for (String labelExpr : labelList) {
+        if (nlm != null && !nlm.containsNodeLabel(labelExpr)) {
+          throw new InvalidLabelResourceRequestException(
+                  "Invalid label resource request, cluster do not contain "
+                          + ", label= " + labelExpression);
+        }
       }
     }
   }
@@ -420,7 +431,9 @@ public class SchedulerUtils {
     if (labelExpression == null) {
       return true;
     }
-    for (String str : labelExpression.split("&&")) {
+
+    String labelList[] = NodeLabelsUtils.getParsedLabels(labelExpression);
+    for (String str : labelList) {
       str = str.trim();
       if (!str.trim().isEmpty()) {
         // check queue label
