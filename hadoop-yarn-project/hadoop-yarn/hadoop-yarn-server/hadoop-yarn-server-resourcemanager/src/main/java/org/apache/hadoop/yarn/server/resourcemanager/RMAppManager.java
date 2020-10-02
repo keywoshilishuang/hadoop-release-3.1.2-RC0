@@ -532,6 +532,7 @@ public class RMAppManager implements EventHandler<RMAppManagerEvent>,
         for (ResourceRequest amReq : amReqs) {
           LOG.warn("stevensli validateAndCreateResourceRequest for amReq:"+amReq.toString());
           LOG.warn("another log for git test.");
+          LOG.warn("");
           SchedulerUtils.normalizeAndValidateRequest(amReq,
               scheduler.getMaximumResourceCapability(queue),
               queue, scheduler, isRecovery, rmContext);
