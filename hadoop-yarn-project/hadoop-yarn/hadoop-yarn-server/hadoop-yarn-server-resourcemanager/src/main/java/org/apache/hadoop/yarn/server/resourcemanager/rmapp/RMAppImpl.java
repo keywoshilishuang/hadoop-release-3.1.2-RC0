@@ -899,7 +899,7 @@ public class RMAppImpl implements RMApp, Recoverable {
       StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
       StringBuilder stevensli_sb=new StringBuilder("");
       for (StackTraceElement stackTraceElement : stevensli_trace) {
-        stevensli_sb.append("\tat " + stackTraceElement);
+        stevensli_sb.append("\n\t\tat " + stackTraceElement);
       }
 
       LOG.error(stevensli_sb.toString());
