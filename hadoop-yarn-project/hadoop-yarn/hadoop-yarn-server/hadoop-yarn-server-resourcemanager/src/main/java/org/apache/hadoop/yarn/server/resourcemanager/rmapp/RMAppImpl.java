@@ -118,6 +118,7 @@ import org.apache.hadoop.yarn.util.resource.Resources;
 import com.google.common.annotations.VisibleForTesting;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
+//每一个App都维护一个这个类的对象
 public class RMAppImpl implements RMApp, Recoverable {
 
   private static final Log LOG = LogFactory.getLog(RMAppImpl.class);
@@ -892,8 +893,9 @@ public class RMAppImpl implements RMApp, Recoverable {
 
     try {
       ApplicationId appID = event.getApplicationId();
-      LOG.debug("Processing event for " + appID + " of type "
+      LOG.warn(" stevensli Processing event for " + appID + " of type "
           + event.getType());
+      LOG.warn("stevensli handle event:"+event.toString());
       final RMAppState oldState = getState();
       try {
         /* keep the master in sync with the state machine */
