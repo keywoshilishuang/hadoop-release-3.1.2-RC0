@@ -29,6 +29,8 @@ import java.util.Stack;
 import org.apache.hadoop.classification.InterfaceAudience.Public;
 import org.apache.hadoop.classification.InterfaceStability.Evolving;
 
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
+
 /**
  * State machine topology.
  * This object is semantically immutable.  If you have a
@@ -359,6 +361,16 @@ final public class StateMachineFactory
     public STATE doTransition(OPERAND operand, STATE oldState,
                               EVENT event, EVENTTYPE eventType) {
       if (hook != null) {
+        LOG.warn(" stevensli Processing doTransition for event" + event.toString() + " of type "
+                + eventType.toString() + " for state: " + oldState.toString());
+        Exception stevensli_e = new Exception("stevensli handle event:"+event.toString());
+        StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+        StringBuilder stevensli_sb=new StringBuilder("");
+        for (StackTraceElement stackTraceElement : stevensli_trace) {
+          stevensli_sb.append("\n\t\tat " + stackTraceElement);
+        }
+        LOG.warn(stevensli_sb.toString());
+
         hook.transition(operand, event);
       }
       return postState;
