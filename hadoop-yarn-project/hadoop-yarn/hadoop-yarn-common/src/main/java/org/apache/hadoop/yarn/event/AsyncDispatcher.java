@@ -198,6 +198,8 @@ public class AsyncDispatcher extends AbstractService implements Dispatcher {
     try{
       EventHandler handler = eventDispatchers.get(type);
       if(handler != null) {
+        LOG.warn("stevensli Dispatching the event for event type:" + type.toString() + "handler is:"
+                + handler.toString());
         handler.handle(event);
       } else {
         throw new Exception("No handler for registered for " + type);
