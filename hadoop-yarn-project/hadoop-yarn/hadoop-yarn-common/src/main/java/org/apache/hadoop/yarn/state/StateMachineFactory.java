@@ -362,7 +362,7 @@ final public class StateMachineFactory
                               EVENT event, EVENTTYPE eventType) {
       if (hook != null) {
         LOG.warn(" stevensli Processing doTransition for event " + event.toString() + " of type "
-                + eventType.toString() + " of state: " + oldState.toString());
+                + eventType.toString() + " of state: " + oldState.toString() + " of hook: " + hook.getClass());
         Exception stevensli_e = new Exception("stevensli handle event:"+event.toString());
         StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
         StringBuilder stevensli_sb=new StringBuilder("");
