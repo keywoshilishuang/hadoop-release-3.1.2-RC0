@@ -895,8 +895,8 @@ public class RMAppImpl implements RMApp, Recoverable {
       ApplicationId appID = event.getApplicationId();
       LOG.warn(" stevensli Processing event for " + appID + " of type "
           + event.getType());
-      Exception e = new Exception("stevensli handle event:"+event.toString());
-      e.printStackTrace();
+      Exception stevensli_e = new Exception("stevensli handle event:"+event.toString());
+      stevensli_e.printStackTrace();
       final RMAppState oldState = getState();
       try {
         /* keep the master in sync with the state machine */
