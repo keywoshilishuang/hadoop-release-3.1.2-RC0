@@ -1661,6 +1661,7 @@ public class CapacityScheduler extends
 
   @Override
   public void handle(SchedulerEvent event) {
+    LOG.warn("stevensli CapacityScheduler->handle for eventType:"+event.getType()+" for event: "+event.toString());
     switch(event.getType()) {
     case NODE_ADDED:
     {
