@@ -906,6 +906,7 @@ public class RMAppImpl implements RMApp, Recoverable {
       final RMAppState oldState = getState();
       try {
         /* keep the master in sync with the state machine */
+        LOG.warn("stevensli RMAppImpl->handle for event:" + event.toString() + " for eventType: " + event.getType());
         this.stateMachine.doTransition(event.getType(), event);
       } catch (InvalidStateTransitionException e) {
         LOG.error("App: " + appID
