@@ -1128,6 +1128,8 @@ public class CapacityScheduler extends
       return EMPTY_ALLOCATION;
     }
 
+    LOG.warn("stevensli start allocate for ApplicationId:" + applicationAttemptId.getApplicationId().toString());
+
     // The allocate may be the leftover from previous attempt, and it will
     // impact current attempt, such as confuse the request and allocation for
     // current attempt's AM container.

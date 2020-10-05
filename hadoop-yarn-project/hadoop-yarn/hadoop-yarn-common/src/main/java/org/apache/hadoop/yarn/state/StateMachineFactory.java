@@ -395,6 +395,17 @@ final public class StateMachineFactory
     public STATE doTransition(OPERAND operand, STATE oldState,
                               EVENT event, EVENTTYPE eventType)
         throws InvalidStateTransitionException {
+      LOG.warn(" stevensli Processing doTransition for event " + event.toString() + " of type "
+              + eventType.toString() + " of state: " + oldState.toString() + " of hook: " + hook.getClass());
+      Exception stevensli_e = new Exception("stevensli handle event:"+event.toString());
+      StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+      StringBuilder stevensli_sb=new StringBuilder("");
+      for (StackTraceElement stackTraceElement : stevensli_trace) {
+        stevensli_sb.append("\n\t\tat " + stackTraceElement);
+      }
+      LOG.warn(stevensli_sb.toString());
+
+
       STATE postState = hook.transition(operand, event);
 
       if (!validPostStates.contains(postState)) {
