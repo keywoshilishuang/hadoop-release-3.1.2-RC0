@@ -301,6 +301,7 @@ final public class StateMachineFactory
       Transition<OPERAND, STATE, EVENTTYPE, EVENT> transition
           = transitionMap.get(eventType);
       if (transition != null) {
+        LOG.warn("stevensli doTransition for oldState:" + oldState.toString() + " eventType: " + eventType.toString() + " transition: " + transition.getClass());
         return transition.doTransition(operand, oldState, event, eventType);
       }
     }
