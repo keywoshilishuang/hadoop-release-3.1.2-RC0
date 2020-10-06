@@ -40,6 +40,8 @@ import org.apache.hadoop.yarn.server.api.protocolrecords.NMContainerStatus;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
+
 public class NMContainerStatusPBImpl extends NMContainerStatus {
 
   NMContainerStatusProto proto = NMContainerStatusProto
@@ -251,6 +253,14 @@ public class NMContainerStatusPBImpl extends NMContainerStatus {
 
   @Override
   public void setNodeLabelExpression(String nodeLabelExpression) {
+    LOG.warn(" stevensli NMContainerStatusPBImpl.setNodeLabelExpression stack for nodeLabelExpression: " + nodeLabelExpression);
+    Exception stevensli_e = new Exception("stevensli print setNodeLabelExpression stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
     maybeInitBuilder();
     if (nodeLabelExpression == null) {
       builder.clearNodeLabelExpression();

@@ -62,6 +62,8 @@ import org.apache.hadoop.yarn.util.resource.Resources;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
+
 @Private
 public class CommonNodeLabelsManager extends AbstractService {
   protected static final Log LOG = LogFactory.getLog(CommonNodeLabelsManager.class);
@@ -896,7 +898,15 @@ public class CommonNodeLabelsManager extends AbstractService {
   private <T> Map<T, Set<NodeId>> getLabelsToNodesMapping(Set<String> labels,
       Class<T> type) {
     Map<T, Set<NodeId>> labelsToNodes = new HashMap<T, Set<NodeId>>();
-    LOG.warn("stevensli getLabelsToNodesMapping aim test.");
+    LOG.warn(" stevensli getLabelsToNodesMapping stack for labels: " + labels.toString() + " of type: "
+            + type.toString());
+    Exception stevensli_e = new Exception("stevensli print stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
     for (String label : labels) {
       if (label.equals(NO_LABEL)) {
         continue;

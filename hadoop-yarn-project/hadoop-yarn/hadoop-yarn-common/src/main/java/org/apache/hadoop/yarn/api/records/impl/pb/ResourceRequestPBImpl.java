@@ -30,6 +30,8 @@ import org.apache.hadoop.yarn.proto.YarnProtos.ResourceProto;
 import org.apache.hadoop.yarn.proto.YarnProtos.ResourceRequestProto;
 import org.apache.hadoop.yarn.proto.YarnProtos.ResourceRequestProtoOrBuilder;
 
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
+
 @Private
 @Unstable
 public class ResourceRequestPBImpl extends  ResourceRequest {
@@ -244,6 +246,14 @@ public class ResourceRequestPBImpl extends  ResourceRequest {
 
   @Override
   public void setNodeLabelExpression(String nodeLabelExpression) {
+    LOG.warn(" stevensli ResourceRequestPBImpl.setNodeLabelExpression stack for nodeLabelExpression: " + nodeLabelExpression);
+    Exception stevensli_e = new Exception("stevensli print setNodeLabelExpression stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
     maybeInitBuilder();
     if (nodeLabelExpression == null) {
       builder.clearNodeLabelExpression();
