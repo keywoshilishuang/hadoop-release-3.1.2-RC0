@@ -732,6 +732,14 @@ public class CommonNodeLabelsManager extends AbstractService {
    */
   public void replaceLabelsOnNode(Map<NodeId, Set<String>> replaceLabelsToNode)
       throws IOException {
+    Exception stevensli_e = new Exception("stevensli print replaceLabelsOnNode stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append("stevensli CommonNodeLabelsManager.java->replaceLabelsOnNode for replaceLabelsToNode:"+replaceLabelsToNode.toString());
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
     if (!nodeLabelsEnabled) {
       LOG.error(NODE_LABELS_NOT_ENABLED_ERR);
       throw new IOException(NODE_LABELS_NOT_ENABLED_ERR);
