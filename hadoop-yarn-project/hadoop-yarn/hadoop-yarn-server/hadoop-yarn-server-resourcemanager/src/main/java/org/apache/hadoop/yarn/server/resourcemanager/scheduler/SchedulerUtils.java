@@ -54,6 +54,7 @@ import org.apache.hadoop.yarn.util.UnitsConversionUtil;
 import org.apache.hadoop.yarn.util.resource.ResourceCalculator;
 import org.apache.hadoop.yarn.util.resource.ResourceUtils;
 import org.apache.hadoop.yarn.util.resource.Resources;
+import org.apache.hadoop.yarn.nodelabels.NodeLabelsUtils;
 
 /**
  * Utilities shared by schedulers. 
@@ -478,7 +479,9 @@ public class SchedulerUtils {
     if (schedulingMode == SchedulingMode.IGNORE_PARTITION_EXCLUSIVITY) {
       partitionToLookAt = RMNodeLabelsManager.NO_LABEL;
     }
-    return hasPendingResourceRequest(rc, usage, partitionToLookAt, cluster);
+
+    boolean r= hasPendingResourceRequest(rc, usage, partitionToLookAt, cluster);
+    return r;
   }
 
   public static RMContainer createOpportunisticRmContainer(RMContext rmContext,

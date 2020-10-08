@@ -40,6 +40,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import org.apache.hadoop.yarn.nodelabels.NodeLabelsUtils;
+
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
 
 /**
  * This is an implementation of the {@link AppPlacementAllocator} that takes
@@ -125,6 +128,15 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
   public PendingAskUpdateResult updatePendingAsk(
       Collection<ResourceRequest> requests,
       boolean recoverPreemptedRequestForAContainer) {
+    Exception stevensli_e = new Exception("stevensli print updatePendingAsk stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append(" stevensli LocalityAppPlacementAllocator.java->updatePendingAsk stack");
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
+
     try {
       this.writeLock.lock();
 
@@ -154,7 +166,11 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
           this.primaryRequestedPartition = partition;
 
           //update the applications requested labels set
-          appSchedulingInfo.addRequestedPartition(partition);
+          String labelList[]=NodeLabelsUtils.getParsedLabels(partition);
+          for(String l:labelList){
+            appSchedulingInfo.addRequestedPartition(l);
+          }
+//          appSchedulingInfo.addRequestedPartition(partition);
 
           PendingAsk lastPendingAsk =
               lastRequest == null ? null : new PendingAsk(
@@ -231,6 +247,15 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
 
   private void decrementOutstanding(SchedulerRequestKey schedulerRequestKey,
       ResourceRequest offSwitchRequest) {
+    Exception stevensli_e = new Exception("stevensli print decrementOutstanding stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append(" stevensli LocalityAppPlacementAllocator.java->decrementOutstanding stack");
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
+
     int numOffSwitchContainers = offSwitchRequest.getNumContainers() - 1;
     offSwitchRequest.setNumContainers(numOffSwitchContainers);
 
@@ -370,10 +395,11 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
   @Override
   public boolean precheckNode(SchedulerNode schedulerNode,
       SchedulingMode schedulingMode) {
-    LOG.warn("stevensli LocalityAppPlacementAllocator.java->precheckNode for schedulerNode:"+schedulerNode.toString()+ " schedulingMode: "+schedulingMode.toString());
+//    LOG.warn("stevensli LocalityAppPlacementAllocator.java->precheckNode for schedulerNode:"+schedulerNode.toString()+ " schedulingMode: "+schedulingMode.toString());
     Exception stevensli_e = new Exception("stevensli print precheckNode stack:");
     StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
     StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append("stevensli LocalityAppPlacementAllocator.java->precheckNode for schedulerNode:"+schedulerNode.toString()+ " schedulingMode: "+schedulingMode.toString())
     for (StackTraceElement stackTraceElement : stevensli_trace) {
       stevensli_sb.append("\n\t\tat " + stackTraceElement);
     }
@@ -389,7 +415,14 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
       nodePartitionToLookAt = RMNodeLabelsManager.NO_LABEL;
     }
 
-    return primaryRequestedPartition.equals(nodePartitionToLookAt);
+    String labelList[]=NodeLabelsUtils.getParsedLabels(primaryRequestedPartition);
+    for(String partition:labelList){
+      if(partition.equals(nodePartitionToLookAt)){
+        return true;
+      }
+    }
+
+    return false;
   }
 
   @Override
