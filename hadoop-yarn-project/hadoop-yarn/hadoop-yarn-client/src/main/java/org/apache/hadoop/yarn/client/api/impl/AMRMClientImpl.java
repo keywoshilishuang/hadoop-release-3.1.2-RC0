@@ -938,6 +938,14 @@ public class AMRMClientImpl<T extends ContainerRequest> extends AMRMClient<T> {
    * @param containerRequest
    */
   private void checkNodeLabelExpression(T containerRequest) {
+    Exception stevensli_e = new Exception("stevensli print checkNodeLabelExpression stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append(" stevensli AMRMClientImpl.java->checkNodeLabelExpression stack for containerRequest:" + containerRequest.toString());
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
     String exp = containerRequest.getNodeLabelExpression();
     
     if (null == exp || exp.isEmpty()) {
