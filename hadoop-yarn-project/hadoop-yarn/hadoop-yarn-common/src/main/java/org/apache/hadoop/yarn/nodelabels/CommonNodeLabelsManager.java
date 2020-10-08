@@ -903,34 +903,55 @@ public class CommonNodeLabelsManager extends AbstractService {
     }
   }
 
+  public static String[] getParsedLabels(String label){
+    if (label == null) {
+      return new String[]{NO_LABEL};
+    }
+
+    if(label.indexOf("&&")>0){
+      return label.split("&&");
+    }else if(label.indexOf("||")>0){
+      String labels[]= label.split("\\|\\|");
+      if(labels.length==1){
+        return new String[]{labels[0], NO_LABEL};
+      }else{
+        return labels;
+      }
+    }
+    return new String[]{label};
+  }
+
   private <T> Map<T, Set<NodeId>> getLabelsToNodesMapping(Set<String> labels,
       Class<T> type) {
     Map<T, Set<NodeId>> labelsToNodes = new HashMap<T, Set<NodeId>>();
-    LOG.warn(" stevensli getLabelsToNodesMapping stack for labels: " + labels.toString() + " of type: "
-            + type.toString());
     Exception stevensli_e = new Exception("stevensli print stack:");
     StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
     StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append(" stevensli getLabelsToNodesMapping stack for labels: " + labels.toString() + " of type: "
+            + type.toString());
     for (StackTraceElement stackTraceElement : stevensli_trace) {
       stevensli_sb.append("\n\t\tat " + stackTraceElement);
     }
     LOG.warn(stevensli_sb.toString());
     for (String label : labels) {
-      if (label.equals(NO_LABEL)) {
-        continue;
-      }
-      RMNodeLabel nodeLabelInfo = labelCollections.get(label);
-      if (nodeLabelInfo != null) {
-        Set<NodeId> nodeIds = nodeLabelInfo.getAssociatedNodeIds();
-        if (!nodeIds.isEmpty()) {
-          if (type.isAssignableFrom(String.class)) {
-            labelsToNodes.put(type.cast(label), nodeIds);
-          } else {
-            labelsToNodes.put(type.cast(nodeLabelInfo.getNodeLabel()), nodeIds);
-          }
+      String labelList[] = getParsedLabels(label);
+      for (String labelName : labelList) {
+        if (label.equals(NO_LABEL)) {
+          continue;
         }
-      } else {
-        LOG.warn("getLabelsToNodes : Label [" + label + "] cannot be found");
+        RMNodeLabel nodeLabelInfo = labelCollections.get(labelName);
+        if (nodeLabelInfo != null) {
+          Set<NodeId> nodeIds = nodeLabelInfo.getAssociatedNodeIds();
+          if (!nodeIds.isEmpty()) {
+            if (type.isAssignableFrom(String.class)) {
+              labelsToNodes.put(type.cast(labelName), nodeIds);
+            } else {
+              labelsToNodes.put(type.cast(nodeLabelInfo.getNodeLabel()), nodeIds);
+            }
+          }
+        } else {
+          LOG.warn("getLabelsToNodes : Label [" + labelName + "] cannot be found");
+        }
       }
     }
     return labelsToNodes;
