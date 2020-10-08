@@ -186,6 +186,8 @@ import com.google.common.annotations.VisibleForTesting;
 import org.apache.hadoop.yarn.util.resource.ResourceUtils;
 import org.apache.hadoop.yarn.util.timeline.TimelineUtils;
 
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
+
 
 /**
  * The client interface to the Resource Manager. This module handles all the rpc
@@ -552,6 +554,14 @@ public class ClientRMService extends AbstractService implements
         .getApplicationSubmissionContext();
 
     LOG.warn("stevensli ClientRMService.java->submitApplication->getApplicationSubmissionContext result is:"+submissionContext.toString());
+    Exception stevensli_e = new Exception("stevensli print submitApplication stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
+
 
     ApplicationId applicationId = submissionContext.getApplicationId();
     CallerContext callerContext = CallerContext.getCurrent();
