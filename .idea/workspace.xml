@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="636588c8-78a0-4d19-97ca-2d4bee003017" name="Default Changelist" comment="git test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-client/src/main/java/org/apache/hadoop/yarn/client/api/impl/AMRMClientImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-client/src/main/java/org/apache/hadoop/yarn/client/api/impl/AMRMClientImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-applications-distributedshell/src/main/java/org/apache/hadoop/yarn/applications/distributedshell/ApplicationMaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/hadoop-yarn-project/hadoop-yarn/hadoop-yarn-applications/hadoop-yarn-applications-distributedshell/src/main/java/org/apache/hadoop/yarn/applications/distributedshell/ApplicationMaster.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +82,7 @@
       <workItem from="1601546916654" duration="2109000" />
       <workItem from="1601608692593" duration="2196000" />
       <workItem from="1601624664348" duration="44574000" />
-      <workItem from="1601901235519" duration="35770000" />
+      <workItem from="1601901235519" duration="36637000" />
     </task>
     <task id="LOCAL-00001" summary="git test">
       <created>1601627605212</created>

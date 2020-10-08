@@ -728,7 +728,7 @@ public class ApplicationMaster {
    */
   @SuppressWarnings({ "unchecked" })
   public void run() throws YarnException, IOException, InterruptedException {
-    LOG.info("Starting ApplicationMaster");
+    LOG.warn("Starting ApplicationMaster");
 
     // Note: Credentials, Token, UserGroupInformation, DataOutputBuffer class
     // are marked as LimitedPrivate
