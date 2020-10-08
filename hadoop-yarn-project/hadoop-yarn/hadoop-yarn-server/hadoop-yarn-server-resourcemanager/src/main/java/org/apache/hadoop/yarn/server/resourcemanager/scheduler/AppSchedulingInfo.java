@@ -18,19 +18,14 @@
 
 package org.apache.hadoop.yarn.server.resourcemanager.scheduler;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.classification.InterfaceAudience.Private;
@@ -55,6 +50,7 @@ import org.apache.hadoop.yarn.server.resourcemanager.scheduler.placement.Pending
 import org.apache.hadoop.yarn.server.resourcemanager.scheduler.placement.SingleConstraintAppPlacementAllocator;
 import org.apache.hadoop.yarn.server.scheduler.SchedulerRequestKey;
 import org.apache.hadoop.yarn.util.resource.Resources;
+import org.apache.hadoop.yarn.nodelabels.NodeLabelsUtils;
 /**
  * This class keeps track of all the consumption of an application. This also
  * keeps track of current running/completed containers for the application.
@@ -95,6 +91,7 @@ public class AppSchedulingInfo {
   public final ContainerUpdateContext updateContext;
   public final Map<String, String> applicationSchedulingEnvs = new HashMap<>();
   private final RMContext rmContext;
+  private final List<Pair<String,Resource>> applicationResourceUsage=new LinkedList<Pair<String,Resource>>();
 
   public AppSchedulingInfo(ApplicationAttemptId appAttemptId, String user,
       Queue queue, AbstractUsersManager abstractUsersManager, long epoch,
@@ -352,10 +349,22 @@ public class AppSchedulingInfo {
   private void updatePendingResources(PendingAskUpdateResult updateResult,
       SchedulerRequestKey schedulerKey, QueueMetrics metrics) {
 
+    Exception stevensli_e = new Exception("stevensli print updatePendingResources stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append("stevensli AppSchedulingInfo.java->updatePendingResources");
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
+
     PendingAsk lastPendingAsk = updateResult.getLastPendingAsk();
     PendingAsk newPendingAsk = updateResult.getNewPendingAsk();
     String lastNodePartition = updateResult.getLastNodePartition();
     String newNodePartition = updateResult.getNewNodePartition();
+
+//    String lastLabelList[]=NodeLabelsUtils.getParsedLabels(lastNodePartition);
+    String newLabelList[]=NodeLabelsUtils.getParsedLabels(newNodePartition);
 
     int lastRequestContainers =
         (lastPendingAsk != null) ? lastPendingAsk.getCount() : 0;
@@ -376,22 +385,33 @@ public class AppSchedulingInfo {
     }
 
     if (lastPendingAsk != null) {
+      for(Pair<String,Resource> res:this.applicationResourceUsage){
+        metrics.decrPendingResources(res.getLeft(), user, 1, res.getRight());
+        queue.decPendingResource(res.getLeft(), res.getRight());
+        appResourceUsage.decPending(res.getLeft(), res.getRight());
+      }
+      this.applicationResourceUsage.clear();
+
       // Deduct resources from metrics / pending resources of queue/app.
-      metrics.decrPendingResources(lastNodePartition, user,
-          lastPendingAsk.getCount(), lastPendingAsk.getPerAllocationResource());
-      Resource decreasedResource = Resources.multiply(
-          lastPendingAsk.getPerAllocationResource(), lastRequestContainers);
-      queue.decPendingResource(lastNodePartition, decreasedResource);
-      appResourceUsage.decPending(lastNodePartition, decreasedResource);
+//      metrics.decrPendingResources(lastNodePartition, user,
+//          lastPendingAsk.getCount(), lastPendingAsk.getPerAllocationResource());
+//      Resource decreasedResource = Resources.multiply(
+//          lastPendingAsk.getPerAllocationResource(), lastRequestContainers);
+//      queue.decPendingResource(lastNodePartition, decreasedResource);
+//      appResourceUsage.decPending(lastNodePartition, decreasedResource);
     }
 
+    String randomLabel=NodeLabelsUtils.getOrLabel(newLabelList);
+    LOG.warn("liubangtest lastNodePartition:"+lastNodePartition+" newNodePartition:"+newNodePartition+" fixed Label:"+randomLabel);
+
     // Increase resources to metrics / pending resources of queue/app.
-    metrics.incrPendingResources(newNodePartition, user,
+    metrics.incrPendingResources(randomLabel, user,
         newPendingAsk.getCount(), newPendingAsk.getPerAllocationResource());
     Resource increasedResource = Resources.multiply(
         newPendingAsk.getPerAllocationResource(), newPendingAsk.getCount());
-    queue.incPendingResource(newNodePartition, increasedResource);
-    appResourceUsage.incPending(newNodePartition, increasedResource);
+    applicationResourceUsage.add(Pair.of(randomLabel, increasedResource));
+    queue.incPendingResource(randomLabel, increasedResource);
+    appResourceUsage.incPending(randomLabel, increasedResource);
   }
 
   public void addRequestedPartition(String partition) {
@@ -589,6 +609,14 @@ public class AppSchedulingInfo {
 
   public void stop() {
     // clear pending resources metrics for the application
+    Exception stevensli_e = new Exception("stevensli print stop stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append("stevensli AppSchedulingInfo.java->stop");
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
     try {
       this.writeLock.lock();
       QueueMetrics metrics = queue.getMetrics();
@@ -596,17 +624,24 @@ public class AppSchedulingInfo {
           .values()) {
         PendingAsk ask = ap.getPendingAsk(ResourceRequest.ANY);
         if (ask.getCount() > 0) {
-          metrics.decrPendingResources(ap.getPrimaryRequestedNodePartition(),
-              user, ask.getCount(), ask.getPerAllocationResource());
+          for(Pair<String,Resource> res:this.applicationResourceUsage){
+            metrics.decrPendingResources(res.getLeft(), user, 1, res.getRight());
+            queue.decPendingResource(res.getLeft(), res.getRight());
+          }
 
-          // Update Queue
-          queue.decPendingResource(
-              ap.getPrimaryRequestedNodePartition(),
-              Resources.multiply(ask.getPerAllocationResource(),
-                  ask.getCount()));
+//          metrics.decrPendingResources(ap.getPrimaryRequestedNodePartition(),
+//              user, ask.getCount(), ask.getPerAllocationResource());
+//
+//          // Update Queue
+//          queue.decPendingResource(
+//              ap.getPrimaryRequestedNodePartition(),
+//              Resources.multiply(ask.getPerAllocationResource(),
+//                  ask.getCount()));
         }
       }
       metrics.finishAppAttempt(applicationId, pending, user);
+
+      this.applicationResourceUsage.clear();
 
       // Clear requests themselves
       clearRequests();
