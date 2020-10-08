@@ -54,7 +54,7 @@ import org.apache.hadoop.yarn.util.UnitsConversionUtil;
 import org.apache.hadoop.yarn.util.resource.ResourceCalculator;
 import org.apache.hadoop.yarn.util.resource.ResourceUtils;
 import org.apache.hadoop.yarn.util.resource.Resources;
-import org.apache.hadoop.yarn.nodelabels.NodeLabelsUtils;
+//import org.apache.hadoop.yarn.nodelabels.NodeLabelsUtils;
 
 /**
  * Utilities shared by schedulers. 
