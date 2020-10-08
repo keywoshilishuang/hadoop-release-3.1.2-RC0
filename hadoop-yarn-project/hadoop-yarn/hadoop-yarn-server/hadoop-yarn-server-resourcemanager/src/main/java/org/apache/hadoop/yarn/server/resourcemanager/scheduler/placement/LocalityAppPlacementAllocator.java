@@ -370,6 +370,16 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
   @Override
   public boolean precheckNode(SchedulerNode schedulerNode,
       SchedulingMode schedulingMode) {
+    LOG.warn("stevensli LocalityAppPlacementAllocator.java->precheckNode for schedulerNode:"+schedulerNode.toString()+ " schedulingMode: "+schedulingMode.toString());
+    Exception stevensli_e = new Exception("stevensli print precheckNode stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
+
+
     // We will only look at node label = nodeLabelToLookAt according to
     // schedulingMode and partition of node.
     String nodePartitionToLookAt;
