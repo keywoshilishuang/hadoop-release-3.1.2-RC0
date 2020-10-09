@@ -479,9 +479,7 @@ public class SchedulerUtils {
     if (schedulingMode == SchedulingMode.IGNORE_PARTITION_EXCLUSIVITY) {
       partitionToLookAt = RMNodeLabelsManager.NO_LABEL;
     }
-
-    boolean r= hasPendingResourceRequest(rc, usage, partitionToLookAt, cluster);
-    return r;
+    return hasPendingResourceRequest(rc, usage, partitionToLookAt, cluster);
   }
 
   public static RMContainer createOpportunisticRmContainer(RMContext rmContext,

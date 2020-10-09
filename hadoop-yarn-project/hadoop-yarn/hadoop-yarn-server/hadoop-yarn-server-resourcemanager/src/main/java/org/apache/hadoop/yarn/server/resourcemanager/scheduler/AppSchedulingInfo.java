@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.apache.commons.lang3.tuple.Pair;
+//import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.classification.InterfaceAudience.Private;
@@ -91,7 +91,7 @@ public class AppSchedulingInfo {
   public final ContainerUpdateContext updateContext;
   public final Map<String, String> applicationSchedulingEnvs = new HashMap<>();
   private final RMContext rmContext;
-  private final List<Pair<String,Resource>> applicationResourceUsage=new LinkedList<Pair<String,Resource>>();
+//  private final List<Pair<String,Resource>> applicationResourceUsage=new LinkedList<Pair<String,Resource>>();
 
   public AppSchedulingInfo(ApplicationAttemptId appAttemptId, String user,
       Queue queue, AbstractUsersManager abstractUsersManager, long epoch,
@@ -364,8 +364,7 @@ public class AppSchedulingInfo {
     String newNodePartition = updateResult.getNewNodePartition();
 
 //    String lastLabelList[]=NodeLabelsUtils.getParsedLabels(lastNodePartition);
-    String newLabelList[]=NodeLabelsUtils.getParsedLabels(newNodePartition);
-
+//    String newLabelList[]=NodeLabelsUtils.getParsedLabels(newNodePartition);
     int lastRequestContainers =
         (lastPendingAsk != null) ? lastPendingAsk.getCount() : 0;
     if (newPendingAsk.getCount() <= 0) {
@@ -385,33 +384,31 @@ public class AppSchedulingInfo {
     }
 
     if (lastPendingAsk != null) {
-      for(Pair<String,Resource> res:this.applicationResourceUsage){
-        metrics.decrPendingResources(res.getLeft(), user, 1, res.getRight());
-        queue.decPendingResource(res.getLeft(), res.getRight());
-        appResourceUsage.decPending(res.getLeft(), res.getRight());
-      }
-      this.applicationResourceUsage.clear();
-
+//      for(Pair<String,Resource> res:this.applicationResourceUsage){
+//        metrics.decrPendingResources(res.getLeft(), user, 1, res.getRight());
+//        queue.decPendingResource(res.getLeft(), res.getRight());
+//        appResourceUsage.decPending(res.getLeft(), res.getRight());
+//      }
+//      this.applicationResourceUsage.clear();
       // Deduct resources from metrics / pending resources of queue/app.
-//      metrics.decrPendingResources(lastNodePartition, user,
-//          lastPendingAsk.getCount(), lastPendingAsk.getPerAllocationResource());
-//      Resource decreasedResource = Resources.multiply(
-//          lastPendingAsk.getPerAllocationResource(), lastRequestContainers);
-//      queue.decPendingResource(lastNodePartition, decreasedResource);
-//      appResourceUsage.decPending(lastNodePartition, decreasedResource);
+      metrics.decrPendingResources(lastNodePartition, user,
+          lastPendingAsk.getCount(), lastPendingAsk.getPerAllocationResource());
+      Resource decreasedResource = Resources.multiply(
+          lastPendingAsk.getPerAllocationResource(), lastRequestContainers);
+      queue.decPendingResource(lastNodePartition, decreasedResource);
+      appResourceUsage.decPending(lastNodePartition, decreasedResource);
     }
 
-    String randomLabel=NodeLabelsUtils.getOrLabel(newLabelList);
-    LOG.warn("liubangtest lastNodePartition:"+lastNodePartition+" newNodePartition:"+newNodePartition+" fixed Label:"+randomLabel);
-
+//    String randomLabel=NodeLabelsUtils.getOrLabel(newLabelList);
+//    LOG.warn("liubangtest lastNodePartition:"+lastNodePartition+" newNodePartition:"+newNodePartition+" fixed Label:"+randomLabel);
     // Increase resources to metrics / pending resources of queue/app.
-    metrics.incrPendingResources(randomLabel, user,
+    metrics.incrPendingResources(newNodePartition, user,
         newPendingAsk.getCount(), newPendingAsk.getPerAllocationResource());
     Resource increasedResource = Resources.multiply(
         newPendingAsk.getPerAllocationResource(), newPendingAsk.getCount());
-    applicationResourceUsage.add(Pair.of(randomLabel, increasedResource));
-    queue.incPendingResource(randomLabel, increasedResource);
-    appResourceUsage.incPending(randomLabel, increasedResource);
+//    applicationResourceUsage.add(Pair.of(randomLabel, increasedResource));
+    queue.incPendingResource(newNodePartition, increasedResource);
+    appResourceUsage.incPending(newNodePartition, increasedResource);
   }
 
   public void addRequestedPartition(String partition) {
@@ -624,25 +621,24 @@ public class AppSchedulingInfo {
           .values()) {
         PendingAsk ask = ap.getPendingAsk(ResourceRequest.ANY);
         if (ask.getCount() > 0) {
-          for(Pair<String,Resource> res:this.applicationResourceUsage){
-            metrics.decrPendingResources(res.getLeft(), user, 1, res.getRight());
-            queue.decPendingResource(res.getLeft(), res.getRight());
-          }
+//          for(Pair<String,Resource> res:this.applicationResourceUsage){
+//            metrics.decrPendingResources(res.getLeft(), user, 1, res.getRight());
+//            queue.decPendingResource(res.getLeft(), res.getRight());
+//          }
 
-//          metrics.decrPendingResources(ap.getPrimaryRequestedNodePartition(),
-//              user, ask.getCount(), ask.getPerAllocationResource());
-//
-//          // Update Queue
-//          queue.decPendingResource(
-//              ap.getPrimaryRequestedNodePartition(),
-//              Resources.multiply(ask.getPerAllocationResource(),
-//                  ask.getCount()));
+          metrics.decrPendingResources(ap.getPrimaryRequestedNodePartition(),
+              user, ask.getCount(), ask.getPerAllocationResource());
+
+          // Update Queue
+          queue.decPendingResource(
+              ap.getPrimaryRequestedNodePartition(),
+              Resources.multiply(ask.getPerAllocationResource(),
+                  ask.getCount()));
         }
       }
       metrics.finishAppAttempt(applicationId, pending, user);
 
-      this.applicationResourceUsage.clear();
-
+//      this.applicationResourceUsage.clear();
       // Clear requests themselves
       clearRequests();
     } finally {

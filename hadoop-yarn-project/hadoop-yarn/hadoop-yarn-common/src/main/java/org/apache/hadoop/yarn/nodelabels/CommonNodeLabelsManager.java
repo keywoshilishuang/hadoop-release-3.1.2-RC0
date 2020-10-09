@@ -58,6 +58,7 @@ import org.apache.hadoop.yarn.nodelabels.event.RemoveClusterNodeLabels;
 import org.apache.hadoop.yarn.nodelabels.event.StoreNewClusterNodeLabels;
 import org.apache.hadoop.yarn.nodelabels.event.UpdateNodeToLabelsMappingsEvent;
 import org.apache.hadoop.yarn.util.resource.Resources;
+import org.apache.hadoop.yarn.nodelabels.NodeLabelsUtils;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
@@ -903,23 +904,23 @@ public class CommonNodeLabelsManager extends AbstractService {
     }
   }
 
-  public static String[] getParsedLabels(String label){
-    if (label == null) {
-      return new String[]{NO_LABEL};
-    }
-
-    if(label.indexOf("&&")>0){
-      return label.split("&&");
-    }else if(label.indexOf("||")>0){
-      String labels[]= label.split("\\|\\|");
-      if(labels.length==1){
-        return new String[]{labels[0], NO_LABEL};
-      }else{
-        return labels;
-      }
-    }
-    return new String[]{label};
-  }
+//  public static String[] getParsedLabels(String label){
+//    if (label == null) {
+//      return new String[]{NO_LABEL};
+//    }
+//
+//    if(label.indexOf("&&")>0){
+//      return label.split("&&");
+//    }else if(label.indexOf("||")>0){
+//      String labels[]= label.split("\\|\\|");
+//      if(labels.length==1){
+//        return new String[]{labels[0], NO_LABEL};
+//      }else{
+//        return labels;
+//      }
+//    }
+//    return new String[]{label};
+//  }
 
   private <T> Map<T, Set<NodeId>> getLabelsToNodesMapping(Set<String> labels,
       Class<T> type) {
@@ -934,7 +935,7 @@ public class CommonNodeLabelsManager extends AbstractService {
     }
     LOG.warn(stevensli_sb.toString());
     for (String label : labels) {
-      String labelList[] = getParsedLabels(label);
+      String labelList[] = NodeLabelsUtils.getParsedLabels(label);
       for (String labelName : labelList) {
         if (label.equals(NO_LABEL)) {
           continue;

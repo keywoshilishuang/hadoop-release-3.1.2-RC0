@@ -469,6 +469,7 @@ public class RMAppManager implements EventHandler<RMAppManagerEvent>,
     // submission or just being recovered.
 
     // Check whether AM resource requirements are within required limits
+    // 这里是AM的资源请求
     if (!submissionContext.getUnmanagedAM()) {
       List<ResourceRequest> amReqs =
           submissionContext.getAMContainerResourceRequests();
