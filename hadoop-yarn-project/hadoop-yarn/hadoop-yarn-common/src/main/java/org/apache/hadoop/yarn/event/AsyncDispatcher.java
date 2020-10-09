@@ -253,7 +253,7 @@ public class AsyncDispatcher extends AbstractService implements Dispatcher {
       Exception stevensli_e = new Exception("stevensli print GenericEventHandler->handle stack:");
       StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
       StringBuilder stevensli_sb=new StringBuilder("");
-      stevensli_sb.append("stevensli AsyncDispatcher.java->GenericEventHandler->handle for event:"+event.toString());
+      stevensli_sb.append("stevensli AsyncDispatcher.java->GenericEventHandler->handle for event:"+event.getClass());
       for (StackTraceElement stackTraceElement : stevensli_trace) {
         stevensli_sb.append("\n\t\tat " + stackTraceElement);
       }
