@@ -358,6 +358,7 @@ public class AppSchedulingInfo {
     }
     LOG.warn(stevensli_sb.toString());
 
+//    todo stevensli：这里的lastPendingAsk是一个什么样的概念？
     PendingAsk lastPendingAsk = updateResult.getLastPendingAsk();
     PendingAsk newPendingAsk = updateResult.getNewPendingAsk();
     String lastNodePartition = updateResult.getLastNodePartition();

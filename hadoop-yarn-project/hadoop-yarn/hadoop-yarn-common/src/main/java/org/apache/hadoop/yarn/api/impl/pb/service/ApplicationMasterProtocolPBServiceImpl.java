@@ -43,6 +43,8 @@ import org.apache.hadoop.yarn.proto.YarnServiceProtos.RegisterApplicationMasterR
 import com.google.protobuf.RpcController;
 import com.google.protobuf.ServiceException;
 
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
+
 @Private
 public class ApplicationMasterProtocolPBServiceImpl implements ApplicationMasterProtocolPB {
 
@@ -56,6 +58,7 @@ public class ApplicationMasterProtocolPBServiceImpl implements ApplicationMaster
   public AllocateResponseProto allocate(RpcController arg0,
       AllocateRequestProto proto) throws ServiceException {
     AllocateRequestPBImpl request = new AllocateRequestPBImpl(proto);
+    LOG.warn("stevensli ApplicationMasterProtocolPBServiceImpl.java->allocate container request is:" + request.toString());
     try {
       AllocateResponse response = real.allocate(request);
       return ((AllocateResponsePBImpl)response).getProto();

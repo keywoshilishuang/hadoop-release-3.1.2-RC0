@@ -163,6 +163,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.SettableFuture;
 
 import static org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacitySchedulerConfiguration.QUEUE_MAPPING;
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
 
 @LimitedPrivate("yarn")
 @Evolving
@@ -1129,6 +1130,14 @@ public class CapacityScheduler extends
     }
 
     LOG.warn("stevensli start allocate for ApplicationId:" + applicationAttemptId.getApplicationId().toString());
+    Exception stevensli_e = new Exception("stevensli print CapacityScheduler.java->allocate stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append(" stevensli CapacityScheduler.java->allocate stack for ApplicationId: " + applicationAttemptId.getApplicationId().toString() + " resourceRequest: " + ask.toString());
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
 
     // The allocate may be the leftover from previous attempt, and it will
     // impact current attempt, such as confuse the request and allocation for
@@ -2150,6 +2159,7 @@ public class CapacityScheduler extends
       boolean isRecovering) {
     try {
       readLock.lock();
+      //todo 这个queue是干嘛的？
       CSQueue queue = getQueue(queueName);
       // Check if the queue is a plan queue
       if ((queue == null) || !(queue instanceof PlanQueue)) {
