@@ -303,6 +303,14 @@ public class AppSchedulingInfo {
     boolean offswitchResourcesUpdated = false;
     for (Map.Entry<SchedulerRequestKey, Map<String, ResourceRequest>> entry :
     dedupRequests.entrySet()) {
+      Exception stevensli_e = new Exception("stevensli print internalAddResourceRequests stack:");
+      StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+      StringBuilder stevensli_sb=new StringBuilder("");
+      stevensli_sb.append(" stevensli AppSchedulingInfo.java->internalAddResourceRequests stack for schedulerRequestKey:"+entry.getKey().toString());
+      for (StackTraceElement stackTraceElement : stevensli_trace) {
+        stevensli_sb.append("\n\t\tat " + stackTraceElement);
+      }
+      LOG.warn(stevensli_sb.toString());
       SchedulerRequestKey schedulerRequestKey = entry.getKey();
       AppPlacementAllocator<SchedulerNode> appPlacementAllocator =
           getAndAddAppPlacementAllocatorIfNotExist(schedulerRequestKey,
