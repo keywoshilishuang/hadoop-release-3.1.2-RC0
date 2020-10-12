@@ -145,6 +145,7 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
       // Update resource requests
       for (ResourceRequest request : requests) {
         String resourceName = request.getResourceName();
+        LOG.warn("stevensli get resourceName is:" + resourceName);
 
         // Update node labels if required
         updateNodeLabels(request);
