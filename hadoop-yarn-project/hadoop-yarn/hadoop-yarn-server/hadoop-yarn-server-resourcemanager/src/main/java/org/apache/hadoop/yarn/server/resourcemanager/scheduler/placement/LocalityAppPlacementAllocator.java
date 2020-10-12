@@ -131,7 +131,7 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
     Exception stevensli_e = new Exception("stevensli print updatePendingAsk stack:");
     StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
     StringBuilder stevensli_sb=new StringBuilder("");
-    stevensli_sb.append(" stevensli LocalityAppPlacementAllocator.java->updatePendingAsk stack");
+    stevensli_sb.append(" stevensli LocalityAppPlacementAllocator.java->updatePendingAsk stack for request:"+requests.toString());
     for (StackTraceElement stackTraceElement : stevensli_trace) {
       stevensli_sb.append("\n\t\tat " + stackTraceElement);
     }
