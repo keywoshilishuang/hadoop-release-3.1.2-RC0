@@ -311,6 +311,7 @@ public class YarnClientImpl extends YarnClient {
       stevensli_sb.append("\n\t\tat " + stackTraceElement);
     }
     LOG.warn(stevensli_sb.toString());
+    LOG.warn(rmClient.getClass().toString());
     rmClient.submitApplication(request);
 
     int pollCount = 0;

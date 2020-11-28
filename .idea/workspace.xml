@@ -96,7 +96,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601627605212</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add comment">
+      <created>1606558216775</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1606558216775</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -112,26 +119,26 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="362" y="75" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1601626623194" />
-    <state x="69" y="14" key="CommitChangelistDialog2" timestamp="1601734716893">
+    <state x="69" y="14" key="CommitChangelistDialog2" timestamp="1606558215558">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="69" y="14" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1601734716893" />
+    <state x="69" y="14" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1606558215558" />
     <state x="550" y="172" key="FileChooserDialogImpl" timestamp="1601729581201">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="550" y="172" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1601729581201" />
-    <state x="459" y="167" width="1077" height="490" key="find.popup" timestamp="1606558163751">
+    <state x="459" y="167" width="1077" height="490" key="find.popup" timestamp="1606562641004">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="459" y="167" width="1077" height="490" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1606558163751" />
+    <state x="459" y="167" width="1077" height="490" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1606562641004" />
     <state x="426" y="188" key="run.anything.popup" timestamp="1602120686813">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="426" y="188" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1602120686813" />
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1602244350508">
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1606562687789">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1602244350508" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1606562687789" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
