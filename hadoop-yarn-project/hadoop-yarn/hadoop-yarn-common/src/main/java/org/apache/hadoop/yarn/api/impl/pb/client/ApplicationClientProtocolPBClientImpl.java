@@ -186,6 +186,8 @@ import org.apache.hadoop.yarn.proto.YarnServiceProtos.SubmitApplicationRequestPr
 
 import com.google.protobuf.ServiceException;
 
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
+
 @Private
 public class ApplicationClientProtocolPBClientImpl implements ApplicationClientProtocol,
     Closeable {
@@ -283,6 +285,14 @@ public class ApplicationClientProtocolPBClientImpl implements ApplicationClientP
   public SubmitApplicationResponse submitApplication(
       SubmitApplicationRequest request) throws YarnException,
       IOException {
+    Exception stevensli_e = new Exception("stevensli print ProtoPB->submitApplication stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append(" stevensli ProtoPB->submitApplication stack for request: " + request.toString());
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
     SubmitApplicationRequestProto requestProto =
         ((SubmitApplicationRequestPBImpl) request).getProto();
     try {
