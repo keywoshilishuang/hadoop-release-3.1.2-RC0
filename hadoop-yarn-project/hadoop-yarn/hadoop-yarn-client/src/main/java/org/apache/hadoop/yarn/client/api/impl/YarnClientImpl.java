@@ -132,6 +132,8 @@ import com.google.common.annotations.VisibleForTesting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
+
 @Private
 @Unstable
 public class YarnClientImpl extends YarnClient {
@@ -301,6 +303,14 @@ public class YarnClientImpl extends YarnClient {
     }
 
     //TODO: YARN-1763:Handle RM failovers during the submitApplication call.
+    Exception stevensli_e = new Exception("stevensli print YarnClientImpl->submitApplication stack:");
+    StackTraceElement[] stevensli_trace = stevensli_e.getStackTrace();
+    StringBuilder stevensli_sb=new StringBuilder("");
+    stevensli_sb.append(" stevensli YarnClientImpl->submitApplication stack for request: " + request.toString());
+    for (StackTraceElement stackTraceElement : stevensli_trace) {
+      stevensli_sb.append("\n\t\tat " + stackTraceElement);
+    }
+    LOG.warn(stevensli_sb.toString());
     rmClient.submitApplication(request);
 
     int pollCount = 0;
