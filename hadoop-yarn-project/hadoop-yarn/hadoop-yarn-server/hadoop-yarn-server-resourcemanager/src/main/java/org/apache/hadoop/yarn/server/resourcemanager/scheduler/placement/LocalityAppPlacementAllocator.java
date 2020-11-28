@@ -167,11 +167,11 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
           this.primaryRequestedPartition = partition;
 
           //update the applications requested labels set
-          String labelList[]=NodeLabelsUtils.getParsedLabels(partition);
-          for(String l:labelList){
-            appSchedulingInfo.addRequestedPartition(l);
-          }
-//          appSchedulingInfo.addRequestedPartition(partition);
+//          String labelList[]=NodeLabelsUtils.getParsedLabels(partition);
+//          for(String l:labelList){
+//            appSchedulingInfo.addRequestedPartition(l);
+//          }
+          appSchedulingInfo.addRequestedPartition(partition);
 
           PendingAsk lastPendingAsk =
               lastRequest == null ? null : new PendingAsk(
