@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import org.apache.hadoop.yarn.nodelabels.NodeLabelsUtils;
 
 import static org.eclipse.jetty.server.handler.gzip.GzipHttpOutputInterceptor.LOG;
 
@@ -416,14 +415,7 @@ public class LocalityAppPlacementAllocator <N extends SchedulerNode>
       nodePartitionToLookAt = RMNodeLabelsManager.NO_LABEL;
     }
 
-    String labelList[]=NodeLabelsUtils.getParsedLabels(primaryRequestedPartition);
-    for(String partition:labelList){
-      if(partition.equals(nodePartitionToLookAt)){
-        return true;
-      }
-    }
-
-    return false;
+    return primaryRequestedPartition.equals(nodePartitionToLookAt);
   }
 
   @Override
